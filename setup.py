@@ -41,7 +41,7 @@
 NAME = 'pycommand'
 DESCRIPTION = 'ArgumentParser Wrapper'
 PACKAGES = ['pycommand', ]
-from pycommand import get_version
+VERSION = "0.0.1"
 ######################################################
 USER = 'hdknr'
 LICENSE = 'Simplfied BSD License'
@@ -51,12 +51,9 @@ MAINTAINER = AUTHOR
 MAINTAINER_EMAIL = AUTHOR_EMAIL
 URL = 'https://github.com/%s/%s' % (USER, NAME)
 ######################################################
-import sys
 import os
 import glob
 from setuptools import setup
-
-sys.path.insert(0, os.path.abspath('lib'))
 
 SCRIPTS = glob.glob('scripts/*.py')
 
@@ -80,7 +77,7 @@ except:
 if __name__ == '__main__':
     setup(
         name=NAME,
-        version=get_version(),
+        version=VERSION,
         license=LICENSE,
         author=AUTHOR,
         author_email=AUTHOR_EMAIL,
