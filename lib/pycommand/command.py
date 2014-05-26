@@ -29,6 +29,7 @@ class SubCommand(object):
 
 
 class Command(object):
+    managers = ['manage.py']
 
     @classmethod
     def subcommands(cls):
@@ -43,7 +44,7 @@ class Command(object):
     def run(self, argv=sys.argv):
         ''' can be called  by Django Management Command interface '''
 
-        args = argv and argv[0] == 'manage.py' and argv[2:] or argv[1:]
+        args = argv and argv[0] in self.managers and argv[2:] or argv[1:]
 
         if len(args) < 1:
             for k, v in self.subcommands().items():
