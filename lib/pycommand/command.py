@@ -40,8 +40,8 @@ class Command(object):
     def subcommand(cls, name):
         return cls.subcommands().get(name, None)
 
-    def run_from_argv(self, argv):
-        ''' Django Management Command interface '''
+    def run(self, argv=sys.argv):
+        ''' can be called  by Django Management Command interface '''
 
         args = argv and argv[0] == 'manage.py' and argv[2:] or argv[1:]
 
@@ -75,4 +75,4 @@ if __name__ == '__main__':
             def run(self, param, **options):
                 print param.msg[0]
     #: exec
-    MyCommand().run_from_argv(sys.argv)
+    MyCommand().run()
