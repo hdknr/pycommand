@@ -11,7 +11,8 @@ class SubCommand(object):
 
     def __init__(self, *args, **kwargs):
         self.parser = argparse.ArgumentParser(
-            prog=self.name, add_help=False,
+            prog=self.name or self.__class__.__name__.lower(),
+            add_help=False,
             description=unicode(self.description))
 
         for a, k in self.args:
@@ -67,7 +68,6 @@ class Command(object):
 if __name__ == '__main__':
     class MyCommand(Command):
         class Echo(SubCommand):
-            name = 'echo'
             description = 'echo back arguments'
             args = [
                 (('msg',), dict(nargs=1, help="Message String")),
