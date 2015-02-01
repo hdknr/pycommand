@@ -67,12 +67,14 @@ class Command(object):
 
 try:
     from django.core.management.base import BaseCommand
+    import django
 
     class DjangoCommand(BaseCommand, Command):
         managers = ['manage.py', ]
 
         def run_from_argv(self, argv):
-            # argv.pop(1)
+            if django.VERSION[1] > 6:
+                argv.pop(1)
             return self.run(argv)
 except:
     pass
