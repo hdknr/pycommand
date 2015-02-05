@@ -45,7 +45,10 @@ class Command(object):
     def run(self, argv=sys.argv):
         ''' can be called  by Django Management Command interface '''
 
-        args = argv and argv[0] in self.managers and argv[2:] or argv[1:]
+        if argv and argv[0] in self.managers:
+            args = argv[2:]
+        else:
+            args = argv[1:]
 
         if len(args) < 1:
             for k, v in self.subcommands().items():
