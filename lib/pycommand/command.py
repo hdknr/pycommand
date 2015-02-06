@@ -30,7 +30,6 @@ class SubCommand(object):
 
 
 class Command(object):
-    managers = ['manage.py']
 
     @classmethod
     def subcommands(cls):
@@ -45,10 +44,7 @@ class Command(object):
     def run(self, argv=sys.argv):
         ''' can be called  by Django Management Command interface '''
 
-        if argv and argv[0] in self.managers:
-            args = argv[2:]
-        else:
-            args = argv[1:]
+        args = argv[1:]
 
         if len(args) < 1:
             for k, v in self.subcommands().items():
@@ -72,10 +68,10 @@ try:
     from django.core.management.base import BaseCommand
 
     class DjangoCommand(BaseCommand, Command):
-        managers = ['manage.py', ]
 
         def run_from_argv(self, argv):
-            return self.run(argv)
+            return self.run(argv[1:])
+
 except:
     pass
 
@@ -83,6 +79,7 @@ except:
 if __name__ == '__main__':
     class MyCommand(Command):
         class Echo(SubCommand):
+            name = "echo"
             description = 'echo back arguments'
             args = [
                 (('msg',), dict(nargs=1, help="Message String")),
