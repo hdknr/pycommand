@@ -64,18 +64,6 @@ class Command(object):
                     print "----- ", k, ":",  v.description
 
 
-try:
-    from django.core.management.base import BaseCommand
-
-    class DjangoCommand(BaseCommand, Command):
-
-        def run_from_argv(self, argv):
-            return self.run(argv[1:])
-
-except:
-    pass
-
-
 if __name__ == '__main__':
     class MyCommand(Command):
         class Echo(SubCommand):
