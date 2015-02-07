@@ -34,8 +34,10 @@ class Command(object):
     @classmethod
     def subcommands(cls):
         return dict(
-            (v.name, v) for k, v in cls.__dict__.items()
-            if inspect.isclass(v) and issubclass(v, SubCommand))
+            (cmd.name, cmd)
+            for name, cmd in inspect.getmembers(cls, inspect.isclass)
+            if issubclass(cmd, SubCommand)
+        )
 
     @classmethod
     def subcommand(cls, name):
