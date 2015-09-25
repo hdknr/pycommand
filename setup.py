@@ -1,92 +1,23 @@
 #! /usr/bin/env python
-# -*- coding: utf-8 -*-
-#
-#  This file is part of "pycomand"
-#
-#  Copyright 2014 LaFoglia
-#
-#  Licensed under the Simplified BSD License;
-#  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at
-#
-#      http://www.freebsd.org/copyright/freebsd-license.html
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#  See the License for the specific language governing permissions and
-#  limitations under the License.
-#
-#  NOTES
-#
-#  Create source distribution tarball:
-#    python setup.py sdist --formats=gztar
-#
-#  Create binary distribution rpm:
-#    python setup.py bdist --formats=rpm
-#
-#  Create binary distribution rpm with being able to change an option:
-#    python setup.py bdist_rpm --release 7
-#
-#  Test installation:
-#    python setup.py install --prefix=/usr --root=/tmp
-#
-#  Install:
-#    python setup.py install
-#  Or:
-#    python setup.py install --prefix=/usr
-#
 
-######################################################
 NAME = 'pycommand'
 DESCRIPTION = 'ArgumentParser Wrapper'
-PACKAGES = ['pycommand', ]
-VERSION = "0.0.1"
-######################################################
-USER = 'hdknr'
-LICENSE = 'Simplfied BSD License'
-AUTHOR = 'Hideki Nara of LaFoaglia,Inc.'
-AUTHOR_EMAIL = 'gmail [at] hdknr.com'
-MAINTAINER = AUTHOR
-MAINTAINER_EMAIL = AUTHOR_EMAIL
-URL = 'https://github.com/%s/%s' % (USER, NAME)
-######################################################
-import os
-import glob
-from setuptools import setup
-
-SCRIPTS = glob.glob('scripts/*.py')
+PACKAGES = [NAME, ]
+SITE = 'github.com'
+USER = "hdknr"
+PROJECT = NAME
+URL = 'https://{0}/{1}/{2}'.format(SITE, USER, PROJECT)
+README = 'README.rst'
 
 
-def read(fname):
-    """Utility function to read the README file."""
-    with open(os.path.join(os.path.dirname(__file__), fname)) as data:
-        return data.read()
-    return ""
-
-try:
-    INSTALL_REQUIRES = [
-        r for r in
-        read('requirements.txt').split('\n')
-        if len(r) > 0 and not r.startswith('-e')
-    ]
-except:
-    INSTALL_REQUIRES = []
-
-
-if __name__ == '__main__':
+def install():
+    from setuptools import setup
     setup(
-        name=NAME,
-        version=VERSION,
-        license=LICENSE,
-        author=AUTHOR,
-        author_email=AUTHOR_EMAIL,
-        maintainer=MAINTAINER,
-        maintainer_email=MAINTAINER_EMAIL,
-        url=URL,
-        description=DESCRIPTION,
-        long_description=read('README.rst'),
-        download_url=URL,
+        license='Simplfied BSD License',
+        author='Hideki Nara of LaFoaglia,Inc.',
+        author_email='gmail [at] hdknr.com',
+        maintainer='LaFoglia,Inc.',
+        maintainer_email='gmail [at] hdknr.com',
         platforms=['any'],
         classifiers=[
             'Development Status :: 4 - Beta',
@@ -97,9 +28,51 @@ if __name__ == '__main__':
             'Operating System :: OS Independent',
             'Programming Language :: Python',
         ],
+        name=NAME,
+        version=getattr(__import__(NAME), 'get_version')(),
+        url=URL,
+        description=DESCRIPTION,
+        download_url=URL,
         package_dir={'': 'lib'},
         packages=PACKAGES,
         include_package_data=True,
         zip_safe=False,
-        scripts=SCRIPTS,
+        long_description=read(README),
+        scripts=glob.glob('scripts/*.py'),
+        install_requires=requires(),
     )
+
+import sys
+import os
+import glob
+
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(BASE_DIR, 'lib'))
+
+
+def path(fname):
+    return os.path.join(BASE_DIR, fname)
+
+
+def read(fname):
+    return open(path(fname)).read()
+
+
+def lines(fname):
+    return [line.strip()
+            for line in open(path(fname)).readlines()]
+
+
+def requires():
+    return lines("requirements/install.txt")
+
+
+def install_links():
+    VE = os.environ.get('VIRTUAL_ENV', None)
+    PIP = VE and os.path.join(VE, "bin/pip") or "pip"
+    os.system("{0} install -r {1}".format(PIP, path("requirements/links.txt")))
+
+
+if __name__ == '__main__':
+    install_links()
+    install()
