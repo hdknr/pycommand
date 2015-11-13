@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 import sys
 import inspect
 import argparse
@@ -13,7 +15,7 @@ class SubCommand(object):
         self.parser = argparse.ArgumentParser(
             prog=self.name or self.__class__.__name__.lower(),
             add_help=False,
-            description=unicode(self.description))
+            description=self.description)
 
         for a, k in self.args:
             self.parser.add_argument(*a, **k)
@@ -50,7 +52,7 @@ class Command(object):
 
         if len(args) < 1:
             for k, v in self.subcommands().items():
-                print "\n\n*** Subcommand:", k
+                print("\n\n*** Subcommand:", k)
                 v().help()
 
         elif len(args) > 1 and args[0] == 'help':
@@ -61,9 +63,9 @@ class Command(object):
             if command:
                 command().execute(*args[1:])
             else:
-                print "ERROR ", args[0], "is not found."
+                print("ERROR ", args[0], "is not found.")
                 for k, v in self.subcommands().items():
-                    print "----- ", k, ":",  v.description
+                    print("----- ", k, ":",  v.description)
 
 
 if __name__ == '__main__':
@@ -72,10 +74,10 @@ if __name__ == '__main__':
             name = "echo"
             description = 'echo back arguments'
             args = [
-                (('msg',), dict(nargs=1, help="Message String")),
+                (('msg',), dict(nargs=2, help="Message String")),
             ]
 
             def run(self, param, **options):
-                print param.msg[0]
+                print(param.msg[0])
     #: exec
     MyCommand().run()
